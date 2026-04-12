@@ -1,0 +1,6 @@
+/* Completely cleared out to prevent Vite light-mode overriding */
+html, body {
+  margin: 0;
+  padding: 0;
+  background-color: #000;
+}
