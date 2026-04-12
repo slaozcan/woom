@@ -36,6 +36,8 @@ npm run dev
 ```
 *Note: You must create a `.env` file containing your Firebase Config and Cloudinary API credentials.*
 
+https://woom-one.vercel.app/
+
 ---
 
 <a id="turkce"></a>
@@ -65,3 +67,4 @@ npm install
 npm run dev
 ```
 *Not: Projeyi kendi cihazınızda çalıştırmak için ana dizinde Firebase ve Cloudinary servis anahtarlarınızı barındıran bir gizli `.env` dosyası oluşturmalısınız.*
+https://woom-one.vercel.app/
