@@ -267,7 +267,7 @@ const AddContentSheet = ({ isOpen, onClose, currentUser }) => {
                 />
             </div>
 
-            <div className="ios-photo-adder" onClick={() => fileInputRef.current?.click()}>
+            <div className="ios-photo-adder">
                 {imagePreview ? (
                     <div className="ios-photo-preview">
                         <img src={imagePreview} alt="Seçilen Fotoğraf" />
@@ -280,7 +280,15 @@ const AddContentSheet = ({ isOpen, onClose, currentUser }) => {
                 ) : (
                     <div className="ios-photo-placeholder">
                         <span className="ios-icon-camera">📷</span>
-                        <span>Fotoğraf Ekle</span>
+                        <span className="ios-photo-label">Fotoğraf Ekle</span>
+                        <span className="ios-photo-optional">(isteğe bağlı)</span>
+                        <button 
+                            type="button"
+                            className="ios-photo-select-btn"
+                            onClick={() => fileInputRef.current?.click()}
+                        >
+                            Fotoğraf Seç
+                        </button>
                     </div>
                 )}
                 <input type="file" accept="image/*" onChange={handleImageSelect} ref={fileInputRef} hidden />
