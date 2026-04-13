@@ -110,3 +110,16 @@ export const deleteContent = async (contentId) => {
     throw error;
   }
 };
+
+export const commentContent = async (contentId, user, commentText) => {
+  try {
+    const { doc, updateDoc } = await import('firebase/firestore');
+    const contentRef = doc(db, 'contents', contentId);
+    await updateDoc(contentRef, {
+      [`comments.${user}`]: commentText
+    });
+  } catch (error) {
+    console.error('Yorum hatası:', error);
+    throw error;
+  }
+};

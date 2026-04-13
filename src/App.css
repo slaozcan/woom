@@ -256,3 +256,114 @@ html, body {
 .ios-list-item.center { display: flex; justify-content: center; }
 .ios-textarea { width: 100%; background: transparent; border: none; color: var(--text-primary); font-size: 15px; font-family: inherit; outline: none; resize: vertical; }
 .ios-textarea::placeholder { color: var(--text-tertiary); }
+
+.ios-comments-container {
+    margin-top: 12px;
+}
+
+.ios-comment-box {
+    margin-top: 10px;
+    padding: 10px 14px;
+    border-radius: 12px;
+    font-size: 13px;
+    background: rgba(255,255,255,0.05);
+}
+
+.ios-comment-box.sila-comment {
+    border-left: 3px solid #ff4785;
+}
+
+.ios-comment-box.seray-comment {
+    border-left: 3px solid #8b5cf6;
+}
+
+.comment-author {
+    font-weight: 700;
+    font-size: 11px;
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 6px;
+    display: block;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.ios-comment-box p {
+    margin: 0;
+    line-height: 1.4;
+    color: #fff;
+    font-style: italic;
+}
+
+.ios-add-comment-btn {
+    margin-top: 10px;
+    background: transparent;
+    border: 1px dashed rgba(255,255,255,0.2);
+    color: rgba(255,255,255,0.5);
+    padding: 10px;
+    border-radius: 12px;
+    width: 100%;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.ios-add-comment-btn:hover {
+    background: rgba(255,255,255,0.1);
+    color: #fff;
+    border-color: rgba(255,255,255,0.4);
+}
+
+.ios-add-comment-box {
+    margin-top: 10px;
+}
+
+.ios-textarea-small {
+    width: 100%;
+    background: rgba(0,0,0,0.4);
+    border: 1px solid rgba(255,255,255,0.1);
+    color: white;
+    border-radius: 12px;
+    padding: 10px;
+    font-size: 13px;
+    font-family: inherit;
+    resize: vertical;
+    margin-bottom: 8px;
+    outline: none;
+}
+
+.ios-textarea-small:focus {
+    border-color: rgba(255,255,255,0.3);
+}
+
+.ios-comment-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+}
+
+.ios-comment-actions button {
+    background: transparent;
+    border: none;
+    color: rgba(255,255,255,0.6);
+    font-size: 13px;
+    padding: 6px 12px;
+    border-radius: 12px;
+    cursor: pointer;
+}
+
+.ios-comment-actions button.bold {
+    color: #fff;
+    font-weight: 600;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.ios-edit-comment-btn {
+    background: transparent;
+    border: none;
+    color: rgba(255,255,255,0.5);
+    font-size: 11px;
+    margin-top: 8px;
+    padding: 0;
+    text-decoration: underline;
+    cursor: pointer;
+}

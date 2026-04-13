@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { addContent, subscribeToContents, uploadImage, compressImage, rateContent, deleteContent} from './firebase';
+import { addContent, subscribeToContents, uploadImage, compressImage, rateContent, deleteContent, commentContent } from './firebase';
 import './App.css'; // EN ÖNEMLİ EKSİK BURADAYDI!
 
 const categoryIcons = {
@@ -32,16 +32,36 @@ const StarRating = ({ rating, onRate, interactive = true }) => {
 
 const ContentCard = ({ content, currentUser }) => {
   const isOwner = content.user === currentUser;
-  const myRating = content.ratings?.[currentUser] || 0;
+  const partnerUser = content.user === 'sila' ? 'seray' : 'sila';
+  const partnerCommentText = content.comments?.[partnerUser];
+  
   const ownerRating = content.rating || 0;
+  
+  const [isCommenting, setIsCommenting] = useState(false);
+  const [draftComment, setDraftComment] = useState(content.comments?.[currentUser] || '');
+  
   const dateStr = new Date(content.createdAt).toLocaleDateString('tr-TR', { day: '2-digit', month: '2-digit', year: 'numeric' });
 
-  const handleRate = async (star) => {
-    if (isOwner) return;
+  useEffect(() => {
+     setDraftComment(content.comments?.[currentUser] || '');
+  }, [content.comments, currentUser]);
+
+  const handleRate = async (star, targetUser) => {
+    if (targetUser !== currentUser) return; // Sadece kendi alanını puanlayabilir
     try {
       await rateContent(content.id, currentUser, star);
     } catch (error) {
       alert('Puanlama hatası!');
+    }
+  };
+
+  const handleSaveComment = async () => {
+    if (!draftComment.trim()) return;
+    try {
+      await commentContent(content.id, currentUser, draftComment.trim());
+      setIsCommenting(false);
+    } catch (error) {
+      alert('Yorum ekleme hatası!');
     }
   };
 
@@ -75,19 +95,66 @@ const ContentCard = ({ content, currentUser }) => {
           
           <div className="ios-ratings-container">
               <div className="ios-rating-row">
-                  <span className="ios-rating-label">Ekleyen ({content.user === 'sila' ? '👩🏼 Sıla' : '👩🏽 Seray'})</span>
-                  <StarRating rating={ownerRating} interactive={false} />
+                  <span className="ios-rating-label">👩🏼 Sıla'nın Puanı</span>
+                  <StarRating 
+                      rating={content.user === 'sila' ? ownerRating : (content.ratings?.['sila'] || 0)} 
+                      onRate={(star) => handleRate(star, 'sila')} 
+                      interactive={currentUser === 'sila' && content.user !== 'sila'} 
+                  />
               </div>
-              {!isOwner && (
               <div className="ios-rating-row">
-                  <span className="ios-rating-label">Senin Puanın</span>
-                  <StarRating rating={myRating} onRate={handleRate} interactive={true} />
+                  <span className="ios-rating-label">👩🏽 Seray'ın Puanı</span>
+                  <StarRating 
+                      rating={content.user === 'seray' ? ownerRating : (content.ratings?.['seray'] || 0)} 
+                      onRate={(star) => handleRate(star, 'seray')} 
+                      interactive={currentUser === 'seray' && content.user !== 'seray'} 
+                  />
               </div>
-              )}
           </div>
 
-          {content.comment && <p className="ios-card-comment">"{content.comment}"</p>}
-          <span className="ios-card-date">{dateStr}</span>
+          <div className="ios-comments-container">
+              {content.comment && (
+                  <div className={`ios-comment-box ${content.user}-comment`}>
+                      <span className="comment-author">{content.user === 'sila' ? '👩🏼 Sıla' : '👩🏽 Seray'}</span>
+                      <p>"{content.comment}"</p>
+                  </div>
+              )}
+
+              {partnerCommentText ? (
+                  <div className={`ios-comment-box ${partnerUser}-comment partner-comment`}>
+                      <span className="comment-author">{partnerUser === 'sila' ? '👩🏼 Sıla' : '👩🏽 Seray'}</span>
+                      <p>"{partnerCommentText}"</p>
+                      {!isOwner && (
+                          <button className="ios-edit-comment-btn" onClick={() => setIsCommenting(true)}>Düzenle</button>
+                      )}
+                  </div>
+              ) : null}
+
+              {!isOwner && !partnerCommentText && !isCommenting && (
+                  <button className="ios-add-comment-btn" onClick={() => setIsCommenting(true)}>
+                      + Yorum Ekle
+                  </button>
+              )}
+
+              {!isOwner && isCommenting && (
+                  <div className="ios-add-comment-box">
+                      <textarea 
+                          value={draftComment}
+                          onChange={(e) => setDraftComment(e.target.value)}
+                          placeholder="Yorumunu yaz..."
+                          className="ios-textarea-small"
+                          rows={2}
+                      />
+                      <div className="ios-comment-actions">
+                          <button onClick={() => { setIsCommenting(false); setDraftComment(content.comments?.[currentUser] || ''); }}>İptal</button>
+                          <button className="bold" onClick={handleSaveComment}>Kaydet</button>
+                      </div>
+                  </div>
+              )}
+          </div>
+          <div style={{marginTop: '12px'}}>
+              <span className="ios-card-date">{dateStr}</span>
+          </div>
         </div>
       </div>
     </div>
